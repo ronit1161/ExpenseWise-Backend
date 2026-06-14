@@ -8,10 +8,15 @@ const AppError = require('./utils/AppError');
 const app = express();
 
 // 1. Global Middlewares
-app.use(cors({
-    origin: true, // Echoes back request origin, ideal for client testing
-    credentials: true // Crucial for receiving/sending HttpOnly cookies
-}));
+app.use(
+    cors({
+        origin: [
+            'http://localhost:5173',
+            'https://your-vercel-domain.vercel.app'
+        ],
+        credentials: true
+    })
+);
 
 app.use(express.json());
 app.use(cookieParser());

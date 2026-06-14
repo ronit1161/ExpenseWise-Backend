@@ -1,19 +1,30 @@
 const dotenv = require('dotenv');
 const { z } = require('zod');
-const path = require('path');
-
-// Load environment variables from backend root .env file
-dotenv.config({ path: path.join(__dirname, '../../.env') });
+dotenv.config();
 
 const envSchema = z.object({
-    PORT: z.preprocess((val) => val || '5000', z.string().transform(Number)),
+    PORT: z.preprocess(
+        (val) => val || '5000',
+        z.string().transform(Number)
+    ),
+
     DB_HOST: z.string().default('localhost'),
+
+    DB_PORT: z.preprocess(
+        (val) => val || '3306',
+        z.string().transform(Number)
+    ),
+
     DB_USER: z.string().default('root'),
     DB_PASSWORD: z.string().default(''),
     DB_NAME: z.string().default('expensewise'),
-    JWT_SECRET: z.string().default('expensewise_dev_access_secret_key_12345'),
-    JWT_REFRESH_SECRET: z.string().default('expensewise_dev_refresh_secret_key_12345'),
-    NODE_ENV: z.enum(['development', 'production', 'test']).default('development')
+
+    JWT_SECRET: z.string(),
+    JWT_REFRESH_SECRET: z.string(),
+
+    NODE_ENV: z
+        .enum(['development', 'production', 'test'])
+        .default('development')
 });
 
 const parsed = envSchema.safeParse(process.env);
