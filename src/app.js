@@ -8,15 +8,16 @@ const AppError = require('./utils/AppError');
 const app = express();
 
 // 1. Global Middlewares
-app.use(
-    cors({
-        origin: [
-            'http://localhost:5173',
-            'https://your-vercel-domain.vercel.app'
-        ],
-        credentials: true
-    })
-);
+app.use(cors({
+    origin: [
+        'https://expense-wise-frontend.vercel.app'
+    ],
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
+app.options('*', cors());
 
 app.use(express.json());
 app.use(cookieParser());
