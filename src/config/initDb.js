@@ -21,9 +21,9 @@ const initDb = async () => {
             port: env.DB_PORT,
             user: env.DB_USER,
             password: env.DB_PASSWORD,
-            ssl: env.DB_HOST !== 'localhost' && env.DB_HOST !== '127.0.0.1' ? {
+            ssl: (env.DB_HOST === 'localhost' || env.DB_HOST === '127.0.0.1' || env.DB_HOST.endsWith('.internal')) ? undefined : {
                 rejectUnauthorized: true
-            } : undefined
+            }
         });
 
         await connection.query(`CREATE DATABASE IF NOT EXISTS \`${env.DB_NAME}\`;`);
@@ -36,9 +36,9 @@ const initDb = async () => {
             user: env.DB_USER,
             password: env.DB_PASSWORD,
             database: env.DB_NAME,
-            ssl: env.DB_HOST !== 'localhost' && env.DB_HOST !== '127.0.0.1' ? {
+            ssl: (env.DB_HOST === 'localhost' || env.DB_HOST === '127.0.0.1' || env.DB_HOST.endsWith('.internal')) ? undefined : {
                 rejectUnauthorized: true
-            } : undefined
+            }
         });
 
         console.log('🔄 Creating tables if they do not exist...');
