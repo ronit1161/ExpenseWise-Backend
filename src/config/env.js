@@ -3,53 +3,33 @@ const { z } = require('zod');
 dotenv.config();
 
 const envSchema = z.object({
-    PORT: z.preprocess(
-        (val) => val || '5000',
-        z.string().transform(Number)
-    ),
-
-    DB_HOST: z.preprocess(
-        (val) => val || process.env.MYSQLHOST || 'localhost',
-        z.string()
-    ),
-
-    DB_PORT: z.preprocess(
-        (val) => val || process.env.MYSQLPORT || '3306',
-        z.string().transform(Number)
-    ),
-
-    DB_USER: z.preprocess(
-        (val) => val || process.env.MYSQLUSER || 'root',
-        z.string()
-    ),
-    DB_PASSWORD: z.preprocess(
-        (val) => val || process.env.MYSQLPASSWORD || '',
-        z.string()
-    ),
-    DB_NAME: z.preprocess(
-        (val) => val || process.env.MYSQLDATABASE || 'expensewise',
-        z.string()
-    ),
-
-    JWT_SECRET: z.string(),
-    JWT_REFRESH_SECRET: z.string(),
-
-    NODE_ENV: z
-        .enum(['development', 'production', 'test'])
-        .default('development')
+    DB_HOST: z.string().default(process.env.MYSQLHOST || 'localhost'),
+    DB_PORT: z.coerce.number().default(Number(process.env.MYSQLPORT || 3306)),
+    DB_USER: z.string().default(process.env.MYSQLUSER || 'root'),
+    DB_PASSWORD: z.string().default(process.env.MYSQLPASSWORD || ''),
+    DB_NAME: z.string().default(process.env.MYSQLDATABASE || 'railway'),
 });
+
+console.log("DB_HOST =", process.env.DB_HOST);
+console.log("MYSQLHOST =", process.env.MYSQLHOST);
+
+console.log("DB_PORT =", process.env.DB_PORT);
+console.log("MYSQLPORT =", process.env.MYSQLPORT);
+
+console.log("DB_USER =", process.env.DB_USER);
+console.log("MYSQLUSER =", process.env.MYSQLUSER);
+
+console.log("DB_NAME =", process.env.DB_NAME);
+console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
 
 const parsed = envSchema.safeParse(process.env);
 
 if (!parsed.success) {
-    console.error('❌ Invalid environment variables:', JSON.stringify(parsed.error.format(), null, 2));
+    console.error(
+        '❌ Invalid environment variables:',
+        JSON.stringify(parsed.error.format(), null, 2)
+    );
     process.exit(1);
 }
 
-module.exports = {
-    DB_HOST: process.env.MYSQLHOST,
-    DB_PORT: Number(process.env.MYSQLPORT),
-    DB_USER: process.env.MYSQLUSER,
-    DB_PASSWORD: process.env.MYSQLPASSWORD,
-    DB_NAME: process.env.MYSQLDATABASE
-};
+module.exports = parsed.data;

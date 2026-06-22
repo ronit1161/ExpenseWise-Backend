@@ -12,9 +12,7 @@ const pool = mysql.createPool({
     queueLimit: 0,
     enableKeepAlive: true,
     keepAliveInitialDelay: 0,
-    ssl: (env.DB_HOST === 'localhost' || env.DB_HOST === '127.0.0.1' || env.DB_HOST.endsWith('.internal')) ? undefined : {
-        rejectUnauthorized: true
-    }
+    ssl: false
 });
 
 module.exports = pool;
