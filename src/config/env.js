@@ -46,4 +46,10 @@ if (!parsed.success) {
     process.exit(1);
 }
 
-module.exports = parsed.data;
+module.exports = {
+    DB_HOST: process.env.MYSQLHOST,
+    DB_PORT: Number(process.env.MYSQLPORT),
+    DB_USER: process.env.MYSQLUSER,
+    DB_PASSWORD: process.env.MYSQLPASSWORD,
+    DB_NAME: process.env.MYSQLDATABASE
+};

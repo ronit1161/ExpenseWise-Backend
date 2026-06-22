@@ -19,15 +19,19 @@ const initDb = async () => {
         console.log("DB_PORT =", env.DB_PORT);
         console.log("DB_USER =", env.DB_USER);
         console.log("DB_NAME =", env.DB_NAME);
+
+        console.log("MYSQLHOST =", process.env.MYSQLHOST);
+        console.log("MYSQLPORT =", process.env.MYSQLPORT);
+        console.log("MYSQLUSER =", process.env.MYSQLUSER);
+        console.log("MYSQLDATABASE =", process.env.MYSQLDATABASE);
         console.log('🔄 Checking/creating database...');
         connection = await mysql.createConnection({
             host: env.DB_HOST,
             port: env.DB_PORT,
             user: env.DB_USER,
             password: env.DB_PASSWORD,
-            ssl: (env.DB_HOST === 'localhost' || env.DB_HOST === '127.0.0.1' || env.DB_HOST.endsWith('.internal')) ? undefined : {
-                rejectUnauthorized: true
-            }
+            connectTimeout: 10000,
+            ssl: false
         });
 
         await connection.end();
@@ -39,9 +43,8 @@ const initDb = async () => {
             user: env.DB_USER,
             password: env.DB_PASSWORD,
             database: env.DB_NAME,
-            ssl: {
-                rejectUnauthorized: false
-            }
+            connectTimeout: 10000,
+            ssl: false
         });
 
         console.log('🔄 Creating tables if they do not exist...');
