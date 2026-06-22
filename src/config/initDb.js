@@ -15,6 +15,10 @@ const categoriesToSeed = [
 const initDb = async () => {
     let connection;
     try {
+        console.log("DB_HOST =", env.DB_HOST);
+        console.log("DB_PORT =", env.DB_PORT);
+        console.log("DB_USER =", env.DB_USER);
+        console.log("DB_NAME =", env.DB_NAME);
         console.log('🔄 Checking/creating database...');
         connection = await mysql.createConnection({
             host: env.DB_HOST,
@@ -26,7 +30,6 @@ const initDb = async () => {
             }
         });
 
-        await connection.query(`CREATE DATABASE IF NOT EXISTS \`${env.DB_NAME}\`;`);
         await connection.end();
 
         // Connect directly to the database to create tables
@@ -36,8 +39,8 @@ const initDb = async () => {
             user: env.DB_USER,
             password: env.DB_PASSWORD,
             database: env.DB_NAME,
-            ssl: (env.DB_HOST === 'localhost' || env.DB_HOST === '127.0.0.1' || env.DB_HOST.endsWith('.internal')) ? undefined : {
-                rejectUnauthorized: true
+            ssl: {
+                rejectUnauthorized: false
             }
         });
 
