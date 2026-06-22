@@ -8,16 +8,28 @@ const envSchema = z.object({
         z.string().transform(Number)
     ),
 
-    DB_HOST: z.string().default('localhost'),
+    DB_HOST: z.preprocess(
+        (val) => val || process.env.MYSQLHOST || 'localhost',
+        z.string()
+    ),
 
     DB_PORT: z.preprocess(
-        (val) => val || '3306',
+        (val) => val || process.env.MYSQLPORT || '3306',
         z.string().transform(Number)
     ),
 
-    DB_USER: z.string().default('root'),
-    DB_PASSWORD: z.string().default(''),
-    DB_NAME: z.string().default('expensewise'),
+    DB_USER: z.preprocess(
+        (val) => val || process.env.MYSQLUSER || 'root',
+        z.string()
+    ),
+    DB_PASSWORD: z.preprocess(
+        (val) => val || process.env.MYSQLPASSWORD || '',
+        z.string()
+    ),
+    DB_NAME: z.preprocess(
+        (val) => val || process.env.MYSQLDATABASE || 'expensewise',
+        z.string()
+    ),
 
     JWT_SECRET: z.string(),
     JWT_REFRESH_SECRET: z.string(),

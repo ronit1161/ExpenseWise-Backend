@@ -16,9 +16,9 @@ const initDb = async () => {
     let connection;
     try {
         console.log('🔄 Checking/creating database...');
-        // Establish initial connection without database selected to ensure DB existence
         connection = await mysql.createConnection({
             host: env.DB_HOST,
+            port: env.DB_PORT,
             user: env.DB_USER,
             password: env.DB_PASSWORD
         });
@@ -29,6 +29,7 @@ const initDb = async () => {
         // Connect directly to the database to create tables
         connection = await mysql.createConnection({
             host: env.DB_HOST,
+            port: env.DB_PORT,
             user: env.DB_USER,
             password: env.DB_PASSWORD,
             database: env.DB_NAME
