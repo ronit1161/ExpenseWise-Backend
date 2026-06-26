@@ -8,8 +8,9 @@ const AppError = require('./utils/AppError');
 const app = express();
 
 // 1. Global Middlewares
+// FRONTEND_URL env var lets you configure the exact Vercel URL without hardcoding.
 const allowedOrigins = [
-    'https://expense-wise-frontend.vercel.app'
+    process.env.FRONTEND_URL || 'https://expense-wise-frontend.vercel.app'
 ];
 
 const corsOptions = {

@@ -31,7 +31,7 @@ const initDb = async () => {
             user: env.DB_USER,
             password: env.DB_PASSWORD,
             connectTimeout: 10000,
-            ssl: false
+            ssl: { rejectUnauthorized: false }
         });
 
         await connection.end();
@@ -44,7 +44,7 @@ const initDb = async () => {
             password: env.DB_PASSWORD,
             database: env.DB_NAME,
             connectTimeout: 10000,
-            ssl: false
+            ssl: { rejectUnauthorized: false }
         });
 
         console.log('🔄 Creating tables if they do not exist...');
